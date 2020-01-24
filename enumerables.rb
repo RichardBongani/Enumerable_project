@@ -1,5 +1,4 @@
 module Enumerable
-
     def my_each
         if block_given?
             for i in 0..self.length-1
@@ -10,7 +9,7 @@ module Enumerable
             return Enumerable
         end
     end
-        
+    
     def my_each_with_index
         if block_given?
             for i in 0..self.length-1
