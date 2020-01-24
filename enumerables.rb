@@ -9,6 +9,7 @@ module Enumerable
       Enumerable
     end
   end
+  
 
   def my_each_with_index
     if block_given?
@@ -19,6 +20,7 @@ module Enumerable
       Enumerable
     end
   end
+  
 
   def my_select
     arr = []
@@ -27,10 +29,11 @@ module Enumerable
         arr.push(self[i]) if yield(self[i])
       end
     else
-      return Enumerable
+      Enumerable
     end
     arr
   end
+  
 
   def my_all?
     results = true
@@ -40,6 +43,7 @@ module Enumerable
     end
     results
   end
+  
 
   def my_any?
     results = false
@@ -48,6 +52,7 @@ module Enumerable
     end
     results
   end
+  
 
   def my_none?
     res = true
@@ -59,6 +64,7 @@ module Enumerable
     end
     !res
   end
+  
 
   def my_count
     counter = 0
@@ -67,6 +73,7 @@ module Enumerable
     end
     counter
   end
+  
 
   def my_map(proc = nil)
     arr = []
@@ -80,13 +87,12 @@ module Enumerable
     arr
   end
 
-  def my_inject(_proc = nil)
-    total ||= self[0]
-    (1..length - 1).each do |a|
-      num1 = self[a]
-      total = yield total, num1
+  def my_inject
+    injection = self[0]
+    slice(1, length - 1).my_each do |item|
+      injection = yield(item, injection)
     end
-    total
+    injection
   end
 end
 
@@ -100,10 +106,10 @@ my_proc = proc { |x| x }
 [1, 2, 3, 4, 5].my_each_with_index { |value, index| p "#{index} with a value of #{value}" }
 p [1, 2, 3, 4, 8].my_select(&:even?)
 p [1, 2, 6, 4, 5].my_all? { |element| element < 15 }
-p [1, 2, 3, 4, 5].my_any? { |item| item == 5 }
-p [4, 4, 6, 4, 10].my_none?(&:even?)
-p [1, 2, 3, 4, 6].my_count(&:even?)
-p [1, 2, 3, 4, 5].my_map { |number| number * 2 }
+p [1, -2, 3, 4, 5].my_any? { |item| item < 0 }
+p [4, 4, 6, 4, 10].my_none? { |element| element > 100 }
+p [1, 2, 3, 4, 6].my_count { |item| item % 3 == 0 }
+p [1, 2, 3, 4, 5].my_map { |number| number * number }
 p [1, 2, 3, 4, 5].my_map(&my_proc)
-[2, 4, 5].my_inject { |total, num1| p total * num1 }
-p multiply_els([2, 4, 5])
+p [2, 4, 5].my_inject { |total, num1| total * num1 }
+# p multiply_els([2, 4, 5])
