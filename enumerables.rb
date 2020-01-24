@@ -10,7 +10,7 @@ module Enumerable
             return Enumerable
         end
     end
-    
+        
     def my_each_with_index
         if block_given?
             for i in 0..self.length-1
@@ -19,8 +19,8 @@ module Enumerable
         else
             return Enumerable
         end
-    # end
-
+    end
+    
     def my_select
         arr = []
         if block_given?
@@ -32,20 +32,18 @@ module Enumerable
         else
             return Enumerable
         end
-        arr
-    end
-
-    def my_all?(&block)
+            arr
+        end
+    
+    def my_all?
+        results = true
         for i in 0..self.length-1
-            if yield(self[i])
-                returns true
-            else
-                returns false
-            end
+            results = yield(self[i])
+            break unless results
         end
         results
     end
-
+    
     def my_any?
         results = false
         for i in 0..self.length-1
@@ -55,16 +53,18 @@ module Enumerable
         end
         results
     end
-
+    
     def my_none?
-        for i in 0..self.length-1
-            if yield(self[i])
-                return false
+        res = true
+        if block_given?
+            for i in 0..self.length-1
+                res=yield(self[i])
+                break
             end
         end
-        return true
+        !res
     end
-
+        
     def my_count
         counter = 0
         for i in 0..self.length-1
@@ -75,16 +75,19 @@ module Enumerable
         counter
     end
 
-    def my_map(proc= nil)
-        array = []
-        for i in 1..self.length
-            yield(self[i])
-            array.push(i)
+    def my_map(proc = nil)
+        arr = []
+        for i in 0..self.length - 1
+            if proc
+                arr.push(proc.call self[i])
+            else
+                arr.push(yield self[i])
+            end
         end
-        array
+        arr
     end
-    
-    def my_inject(total = nil)
+
+    def my_inject(proc = nil)
         total = self[0] unless total
         for a in 1..self.length - 1
             num1 = self[a]
@@ -92,23 +95,23 @@ module Enumerable
         end
         total
     end
-
 end
 
 def multiply_els(arr)
-    arr.my_inject( :*)
+    arr.my_inject{|number1, number2| number1*number2}
 end
 
 my_proc = Proc.new{|x| x}
 
-[1,2,3,4,5].my_each {|x| p x}
+[1,2,3,4,5].my_each {|x| p  x}
 [1,2,3,4,5].my_each_with_index {|value,index| p "#{index} with a value of #{value}"}
 p [1,2,3,4,8].my_select {|item| item % 2 == 0}
-[1,2,6,4,5].my_all?{|element| p element > 0}
-[1,2,3,4,5].my_any?{|item| p item > 10}
-[1,2,3,4,5].my_none?{|element| p element.even?}
-p [1,2,3,4,5].my_count{|item| item < 5}
-p [1,2,3,4,5].my_map{|x|  x }
+p [1,2,6,4,5].my_all?{|element| element < 15}
+p [1,2,3,4,5].my_any?{|item| item == 5}
+p [4,4,6,4,10].my_none?{|element| element.even?}
+p [1,2,3,4,6].my_count{|item| item%2==0}
+p [1,2,3,4,5].my_map{|number| number*2}
 p [1,2,3,4,5].my_map(&my_proc)
 [2,4,5].my_inject{|total,num1| p total*num1}
+p multiply_els([2,4,5])
 
