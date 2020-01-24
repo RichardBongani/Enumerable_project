@@ -30,7 +30,7 @@ module Enumerable
       return Enumerable
     end
     arr
-      end
+  end
 
   def my_all?
     results = true
