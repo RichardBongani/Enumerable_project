@@ -10,7 +10,6 @@ module Enumerable
     end
   end
   
-
   def my_each_with_index
     if block_given?
       (0..length - 1).each do |i|
@@ -21,7 +20,6 @@ module Enumerable
     end
   end
   
-
   def my_select
     arr = []
     if block_given?
@@ -34,7 +32,6 @@ module Enumerable
     arr
   end
   
-
   def my_all?
     results = true
     (0..length - 1).each do |i|
