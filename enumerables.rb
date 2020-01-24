@@ -19,7 +19,7 @@ module Enumerable
       Enumerable
     end
   end
-  
+
   def my_select
     arr = []
     if block_given?
@@ -31,7 +31,7 @@ module Enumerable
     end
     arr
   end
-  
+
   def my_all?
     results = true
     (0..length - 1).each do |i|
@@ -40,7 +40,7 @@ module Enumerable
     end
     results
   end
-  
+
   def my_any?
     results = false
     (0..length - 1).each do |i|
@@ -48,7 +48,7 @@ module Enumerable
     end
     results
   end
-  
+
   def my_none?
     res = true
     if block_given?
@@ -59,7 +59,7 @@ module Enumerable
     end
     !res
   end
-  
+
   def my_count
     counter = 0
     (0..length - 1).each do |i|
@@ -67,7 +67,7 @@ module Enumerable
     end
     counter
   end
-  
+
   def my_map(proc = nil)
     arr = []
     (0..length - 1).each do |i|
@@ -79,7 +79,7 @@ module Enumerable
     end
     arr
   end
-  
+
   def my_inject
     injection = self[0]
     slice(1, length - 1).my_each do |item|
