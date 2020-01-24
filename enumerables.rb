@@ -1,15 +1,14 @@
 module Enumerable
-    
-def my_each
-  if block_given?
-    for i in 0..self.length-1
-      yield(self[i])
+    def my_each
+        if block_given?
+            for i in 0..self.length-1
+                yield(self[i])
+            end
+            self
+        else
+            return Enumerable
+        end
     end
-      self
-    else
-      return Enumerable
-  send
-end
     
     def my_each_with_index
         if block_given?
