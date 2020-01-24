@@ -41,7 +41,6 @@ module Enumerable
     results
   end
   
-
   def my_any?
     results = false
     (0..length - 1).each do |i|
@@ -50,7 +49,6 @@ module Enumerable
     results
   end
   
-
   def my_none?
     res = true
     if block_given?
@@ -62,7 +60,6 @@ module Enumerable
     !res
   end
   
-
   def my_count
     counter = 0
     (0..length - 1).each do |i|
@@ -71,7 +68,6 @@ module Enumerable
     counter
   end
   
-
   def my_map(proc = nil)
     arr = []
     (0..length - 1).each do |i|
@@ -83,7 +79,7 @@ module Enumerable
     end
     arr
   end
-
+  
   def my_inject
     injection = self[0]
     slice(1, length - 1).my_each do |item|
@@ -109,4 +105,4 @@ p [1, 2, 3, 4, 6].my_count { |item| item % 3 == 0 }
 p [1, 2, 3, 4, 5].my_map { |number| number * number }
 p [1, 2, 3, 4, 5].my_map(&my_proc)
 p [2, 4, 5].my_inject { |total, num1| total * num1 }
-# p multiply_els([2, 4, 5])
+p multiply_els([2, 4, 5])
