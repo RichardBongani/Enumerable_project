@@ -99,11 +99,11 @@ my_proc = proc { |x| x }
 [1, 2, 3, 4, 5].my_each { |x| p x }
 [1, 2, 3, 4, 5].my_each_with_index { |value, index| p "#{index} with a value of #{value}" }
 p [1, 2, 3, 4, 8].my_select(&:even?)
-p [1, 2, 6, 4, 5].my_all? { |element| element < 15 }
-p [1, 2, 3, 4, 5].my_any? { |item| item == 5 }
+p ([1, 2, 6, 4, 5].my_all? { |element| element < 15 })
+p ([1, 2, 3, 4, 5].my_any?) { |item| item == 5 }
 p [4, 4, 6, 4, 10].my_none?(&:even?)
 p [1, 2, 3, 4, 6].my_count(&:even?)
-p [1, 2, 3, 4, 5].my_map { |number| number * 2 }
+p ([1, 2, 3, 4, 5]).my_map { |number| number * 2 }
 p [1, 2, 3, 4, 5].my_map(&my_proc)
 [2, 4, 5].my_inject { |total, num1| p total * num1 }
 p multiply_els([2, 4, 5])
