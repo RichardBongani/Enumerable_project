@@ -9,7 +9,7 @@ module Enumerable
       Enumerable
     end
   end
-  
+
   def my_each_with_index
     if block_given?
       (0..length - 1).each do |i|
