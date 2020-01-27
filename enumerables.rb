@@ -99,9 +99,9 @@ my_proc = proc { |x| x }
 [1, 2, 3, 4, 5].my_each_with_index { |value, index| p "#{index} with a value of #{value}" }
 p [1, 2, 3, 4, 8].my_select(&:even?)
 p [1, 2, 6, 4, 5].my_all? { |element| element < 15 }
-p [1, -2, 3, 4, 5].my_any? { |item| item.negative? }
+p [1, -2, 3, 4, 5].my_any?(&:negative?)
 p [4, 4, 6, 4, 10].my_none? { |element| element > 100 }
-p [1, 2, 3, 4, 6].my_count { |item| (item % 3).zero?}
+p [1, 2, 3, 4, 6].my_count { |item| (item % 3).zero? }
 p [1, 2, 3, 4, 5].my_map { |number| number * number }
 p [1, 2, 3, 4, 5].my_map(&my_proc)
 p [2, 4, 5].my_inject { |total, num1| total * num1 }
