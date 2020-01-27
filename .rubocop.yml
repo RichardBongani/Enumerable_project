@@ -16,12 +16,8 @@ Metrics/AbcSize:
   Max: 30
 Metrics/ClassLength:
   Max: 150
-Metrics/BlockLength:
-  ExcludedMethods: ['describe']
-Style/Documentation:
-  Enabled: false
-Style/ClassAndModuleChildren:
-  Enabled: false
+Metrics/BlockLength:  EnforcedStyle: indented
+Collapse
 Layout/AlignHash:
   EnforcedColonStyle: key
 Layout/ExtraSpacing:
@@ -29,7 +25,6 @@ Layout/ExtraSpacing:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
-Collapse
 
 
 
