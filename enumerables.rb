@@ -1,6 +1,5 @@
-# frozen_string_literal: true
-
 module Enumerable
+
   def my_each
     if block_given?
       (0..length - 1).each do |i|
