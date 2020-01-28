@@ -1,7 +1,7 @@
 module Enumerable
 
   def my_each
-    return to_enum unless block_given?
+    return p to_enum(__method__) unless block_given?
       i = 0
       while i < self.size
         yield(self[i])
@@ -18,12 +18,12 @@ module Enumerable
           ind += 1
         end
       else
-        return to_enum
+        return to_enum(__method__)
       end
     end
 
   def my_select
-      return to_enum unless block_given?
+    return p to_enum(__method__) unless block_given?
       array = []
       i = 0
       while i < self.size
@@ -129,7 +129,7 @@ module Enumerable
   
         result
       else
-        return "#{self}".to_enum
+        return to_enum(__method__)
       end
     end
 end
