@@ -1,110 +1,135 @@
 module Enumerable
 
   def my_each
-    if block_given?
+    return to_enum unless block_given?
       i = 0
       while i < self.size
         yield(self[i])
         i += 1
       end
-      self
-    end
+      return to_enum
   end
 
   def my_each_with_index
-    if block_given?
-      i = 0
-      while i < self.size
-        yield(self[i],i)
-        i += 1
+      if block_given?
+        ind = 0
+        size.times do
+          yield(self[ind], ind)
+          ind += 1
+        end
+      else
+        return to_enum
       end
-      self
     end
-  end
 
   def my_select
-    if block_given?
+      return to_enum unless block_given?
       array = []
       i = 0
-      while i < self.length
-        array << self[i] if yield(i)
-            self[i] += 1
+      while i < self.size
+          array << i if yield(self[i])
+          i +=1                
       end
-      array
-    end
+      return to_enum
   end
 
-  def my_all?
-    results = true
-    (0..length - 1).each do |i|
-      results = yield(self[i])
-      break unless results
-    end
-    results
-  end
-
-  def my_any?
-    results = false
-    (0..length - 1).each do |i|
-      results = true if yield(self[i])
-    end
-    results
-  end
-
-  def my_none?
-    res = true
-    if block_given?
-      (0..length - 1).each do |i|
-        res = yield(self[i])
-        break
-      end
-    end
-    !res
-  end
-
-  def my_count
-    counter = 0
-    (0..length - 1).each do |i|
-      counter += 1 if yield(self[i])
-    end
-    counter
-  end
-
-  def my_map(proc = nil)
-    arr = []
-    (0..length - 1).each do |i|
-      if proc
-        arr.push(proc.call(self[i]))
+  def my_all?(pattern = nil)
+      all = true
+      if block_given?
+        my_each { |i| all = false unless yield i }
+      elsif pattern
+        my_each { |i| all = false unless pattern === i }
       else
-        arr.push(yield self[i])
+        my_each { |i| all = false unless i }
+      end
+      all
+    end
+
+  def my_any?(pattern = nil)
+      any = false
+      if block_given?
+          my_each {|element| any = true if yield element}
+      elsif pattern
+          my_each {|element| any = true if pattern === element}
+      else
+          my_each {|element| any = true if element}
+      end
+      any
+  end
+
+  def my_none?(pattern = nil)
+      none = true
+      if block_given?
+          my_each {|i| none = false if yield i}
+      elsif pattern
+          my_each {|i| none = false if pattern === i}
+      else
+          my_each {|i| none = false if i}
+      end
+      none
+  end
+
+  def my_count(answer = nil, &block)
+      result = 0
+      if block && !answer
+        my_each { |n| result += 1 if yield(n) }
+      elsif !answer
+        my_each { result += 1 }
+      else
+        my_each { |n| result += 1 if answer == n }
+      end
+      result
+    end
+
+    def my_inject(*args)
+      raise 'no block_given' if !block_given? && args.nil?
+      array = to_a
+      memo = args[0] || array[0]
+      if block_given? && args.empty?
+        array.my_each_with_index do |item, index|
+          next if index.zero?
+          memo = yield(item, memo)
+        end
+      elsif block_given? && args[0]
+        memo = args[0]
+        array.my_each do |item|
+          memo = yield(item, memo)
+        end
+      elsif args[0].is_a? Symbol
+        memo = array[0]
+        array.my_each_with_index do |item, index|
+          next if index.zero?
+          memo = memo.send(args[0], item)
+        end
+      else
+        memo = args[0]
+        array.my_each_with_index do |item, _index|
+          memo = memo.send(args[1], item)
+        end
+      end
+      memo
+    end
+  
+    def multiply_els(array)
+      array.my_inject(1) do |index, value|
+        index * value
       end
     end
-    arr
-  end
-
-  def my_inject
-    injection = self[0]
-    slice(1, length - 1).my_each do |item|
-      injection = yield(item, injection)
+  
+    def my_map(&block)
+      if block_given?
+        result = []
+        if block.nil?
+          return result
+        else
+          my_each do |item|
+            result << block.call(item)
+          end
+        end
+  
+        result
+      else
+        return "#{self}".to_enum
+      end
     end
-    injection
-  end
 end
-
-def multiply_els(arr)
-  arr.my_inject { |number1, number2| number1 * number2 }
-end
-
-my_proc = proc { |x| x }
-
-# [1, 2, 3, 4, 5].my_each { |x| p x }
-# [1, 2, 3, 4, 5].my_each_with_index { |value, index| p "#{index} with a value of #{value}" }
-# p [1, 2, 3, 4, 8].my_select(&:even?)
-# p [1, 2, 6, 4, 5].my_all? { |element| element < 15 }
-# p [1, 2, 3, 4, 5].my_any?(&:negative?)
-# p [1, 2, 3, 4, 5].my_none? { |element| element > 100 }
-# p [1, 2, 3, 4, 5].my_count { |item| (item % 3).zero? }
-# p [1, 2, 3, 4, 5].my_map { |number| number * number }
-# p [1, 2, 3, 4, 5].my_map(&my_proc)
-# p [2, 4, 5].my_inject { |total, num1| total * num1 }
-# p multiply_els([2, 4, 5])
