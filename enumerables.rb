@@ -120,10 +120,14 @@ module Enumerable
     end
 
     def my_inject(*args)
-      init = args.length > 0
-      res = init ? args[0] : self[0]
-      self.drop(init ? 0 : 1).my_each {|element| res = yield(res, element)}
-      return res
+      if block_given?
+        init = args.length > 0
+        res = init ? args[0] : self[0]
+        self.drop(init ? 0 : 1).my_each {|element| res = yield(res, element)}
+        return res
+      else
+        return to_enum
+      end
     end
   
     def multiply_els(array)
