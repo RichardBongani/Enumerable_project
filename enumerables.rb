@@ -12,10 +12,10 @@ module Enumerable
 
   def my_each_with_index
       if block_given?
-        ind = 0
-        size.times do
-          yield(self[ind], ind)
-          ind += 1
+        i = 0
+        my_each do
+          yield(self[i], i)
+          i += 1
         end
       else
         return to_enum(__method__)
@@ -27,20 +27,26 @@ module Enumerable
       array = []
       i = 0
       while i < self.size
-          array << i if yield(self[i])
+          array << self[i] if yield(self[i])
           i +=1                
       end
-      return to_enum
+      array
   end
 
   def my_all?(pattern = nil)
       all = true
       if block_given?
-        my_each { |i| all = false unless yield i }
+        my_each do |i|
+          all = false unless yield i
+        end
       elsif pattern
-        my_each { |i| all = false unless pattern === i }
+        my_each do |i| 
+          all = false unless pattern === i 
+        end
       else
-        my_each { |i| all = false unless i }
+        my_each do |i|
+          all = false unless i
+        end
       end
       all
     end
@@ -48,11 +54,17 @@ module Enumerable
   def my_any?(pattern = nil)
       any = false
       if block_given?
-          my_each {|element| any = true if yield element}
+          my_each do |element| 
+            any = true if yield element
+          end
       elsif pattern
-          my_each {|element| any = true if pattern === element}
+          my_each do |element|
+            any = true if pattern === element
+          end
       else
-          my_each {|element| any = true if element}
+          my_each do |element| 
+            any = true if element
+          end
       end
       any
   end
