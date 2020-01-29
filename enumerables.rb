@@ -33,64 +33,76 @@ module Enumerable
       array
   end
 
-  def my_all?(pattern = nil)
-      all = true
-      if block_given?
-        my_each do |i|
-          all = false unless yield i
+  def my_all?(pattern = nil) #(true) if  block never ret. false or nil
+      method_all = true
+      if block_given? # this makes sure that our program does not crash if my_all doesnt have a block
+        my_each do |i| # for each element in the array.
+          method_all = false unless yield i # return false if all the elements in a block evaluates to false
         end
-      elsif pattern
+        elsif pattern
         my_each do |i| 
-          all = false unless pattern === i 
+          method_all = false unless pattern === i 
         end
       else
         my_each do |i|
-          all = false unless i
+          method_all = false unless i
         end
       end
-      all
+      method_all
     end
 
-  def my_any?(pattern = nil)
-      any = false
-      if block_given?
-          my_each do |element| 
-            any = true if yield element
+  def my_any?(pattern = nil) #(true) if  block ever returns val other than false/nil
+      method_any = false
+      if block_given? # this makes sure that my_any does not crash  if we dont give it a block
+          my_each do |element| # iterate through each element in an array
+            method_any = true if yield element # return true  if any of the elements in the block evaluates to true
           end
       elsif pattern
           my_each do |element|
-            any = true if pattern === element
+            method_any = true if pattern === element
           end
       else
           my_each do |element| 
-            any = true if element
+            method_any = true if element
           end
       end
-      any
+      method_any
   end
 
   def my_none?(pattern = nil)
-      none = true
+      method_none = true
       if block_given?
-          my_each {|i| none = false if yield i}
+          my_each  do |i| 
+            method_none = false if yield i #resturns false if none of the elements evauluates to true
+          end
       elsif pattern
-          my_each {|i| none = false if pattern === i}
+          my_each do |i| 
+            method_none = false if pattern === i
+          end
       else
-          my_each {|i| none = false if i}
+          my_each do |i| 
+            method_none = false if i
+          end
       end
-      none
+      method_none
   end
 
   def my_count(answer = nil, &block)
-      result = 0
+      method_count = 0
       if block && !answer
-        my_each { |n| result += 1 if yield(n) }
+        my_each do |n| 
+          method_count += 1 if yield(n)
+        end
       elsif !answer
-        my_each { result += 1 }
+        my_each do |n|
+          method_count += 1
+        end
       else
-        my_each { |n| result += 1 if answer == n }
+        my_each do |n| 
+          method_count += 1 if answer == n
+        end
       end
-      result
+      method_count
     end
 
     def my_inject(*args)
@@ -129,16 +141,13 @@ module Enumerable
     end
   
     def my_map(&block)
-      if block_given?
-        result = []
+      if block_given? #this makes sure that our map does not crash if any block is not given
+        result = [] #empty array that will store an array based on the conditions 
         if block.nil?
           return result
-        else
-          my_each do |item|
-            result << block.call(item)
-          end
+        elsif
+          my_each {|item| result << yield(item)}
         end
-  
         result
       else
         return to_enum(__method__)
