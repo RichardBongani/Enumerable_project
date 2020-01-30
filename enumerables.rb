@@ -22,7 +22,7 @@ module Enumerable
       end
     end
 
-  def my_select
+  def my_select(&block)
     return p to_enum(__method__) unless block_given?
       array = []
       i = 0
@@ -119,18 +119,25 @@ module Enumerable
       end
     end
 
-    def my_inject(*args)
+    def my_inject(memory = nil, sym = nil, &block)
       if block_given?
-        init = args.length > 0
-        res = init ? args[0] : self[0]
-        self.drop(init ? 0 : 1).my_each {|element| res = yield(res, element)}
-        return res
+        memory = memory.to_sym if memory.is_a?(String) && !sym && !block
+        block, memory = memory.to_proc, nil if memory.is_a?(Symbol) && !sym
+        sym = sym.to_sym if sym.is_a?(String)
+        block = sym.to_proc if sym.is_a?(Symbol)
+        my_each do |i| 
+          memory = memory.nil? ? i : yield(memory, i)
+        end
+          return memory
       else
         return to_enum
+        
       end
     end
-  
+
     def multiply_els(array)
       array.my_inject{|index, value| index * value}
     end
+  
+    
 end
