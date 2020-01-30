@@ -121,17 +121,16 @@ module Enumerable
 
     def my_inject(memory = nil, sym = nil, &block)
       if block_given?
-        memory = memory.to_sym if memory.is_a?(String) && !sym && !block
-        block, memory = memory.to_proc, nil if memory.is_a?(Symbol) && !sym
-        sym = sym.to_sym if sym.is_a?(String)
-        block = sym.to_proc if sym.is_a?(Symbol)
+        memory = memory.to_sym.class if memory.kind_of?(String) && !sym && !block
+        block, memory = memory.to_proc.class, nil if memory.kind_of?(Symbol) && !sym
+        sym = sym.to_sym.class if sym.kind_of?(String)
+        block = sym.to_proc.class if sym.kind_of?(Symbol)
         my_each do |i| 
           memory = memory.nil? ? i : yield(memory, i)
         end
           return memory
       else
         return to_enum
-        
       end
     end
 
@@ -139,5 +138,4 @@ module Enumerable
       array.my_inject{|index, value| index * value}
     end
   
-    
 end
