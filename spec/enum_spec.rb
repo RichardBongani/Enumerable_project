@@ -37,4 +37,16 @@ describe Enumerable do
   it "returns false if none of the elements in the array satisfy the condition", negative:true do
     expect([112, 200, 300, 444, 522].my_none? { |element| element > 100 }).to eq(false)
   end
+
+  it "returns an integer that satisfies the condition of the block" do
+    expect([1, 2, 3, 4, 5].my_count { |item| (item % 2).zero? }).to eq(2)
+  end
+
+  it "will check all elements of the array and make the passed changes" do
+    expect([1, 2, 3, 4, 5].my_map { |number| number * number }).to eq([1, 4, 9, 16, 25])
+  end
+
+  it "will run through the array and will return a single integer" do
+    expect([2, 4, 5].my_inject { |total, num1| total * num1 }).to eq(40)
+  end
 end
