@@ -43,8 +43,8 @@ Ruby is used to build this project & IRB is being used to test the code.
 
  # Authors
 
-  Richard Bongani Phala
-  Eduardo
+  Richard Bongani Phala<br>
+  Eduardo Alvarenga
 
  # LinkedIn Profiles
 
