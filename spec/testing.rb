@@ -1,4 +1,4 @@
-require_relative "enumerables.rb"
+require_relative "../bin/enumerables.rb"
 
 
   a = [1,2,3,4,5]
